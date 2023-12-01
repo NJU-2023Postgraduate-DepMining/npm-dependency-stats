@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+
+
+
+  data:
+    mongodb:
+        host: 172.29.4.74
+        port: 30004
+        database: test
+        password: mongoadmin
+        username: mongoadmin
+        authentication-database: admin
+
+      #      下面注解，直接使用uri会报错，导致认证失败
+      #      uri: mongodb://mongoadmin:mongoadmin@172.29.4.74:30004/test
+
+
+
