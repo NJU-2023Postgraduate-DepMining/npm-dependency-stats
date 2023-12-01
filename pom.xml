@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.edu.nju.se</groupId>
-    <artifactId>Npm-Dependency</artifactId>
+    <artifactId>npm-dependency</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Npm-Dependency</name>
     <description>Npm-Dependency</description>
