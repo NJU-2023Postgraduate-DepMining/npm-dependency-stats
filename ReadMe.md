@@ -6,3 +6,6 @@
 
 文档在： https://app.apifox.com/project/3690154
 
+使用JDBCtemplate直接调用SQL语句，返回的是List<Map<String, Object>>，需要在业务逻辑层转换成对象。
+
+
