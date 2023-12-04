@@ -1,9 +1,8 @@
-
-
-FROM openjdk:8-jdk-alpine
+FROM maven:3.8.6-openjdk-8
 # 设置工作目录在镜像的 /app 目录下
 WORKDIR /app
-# 将jar包添加到容器中并更名为app.jar
-COPY  target/npm-dependency-0.0.1-SNAPSHOT.jar /app/
+COPY . .
+RUN mvn -DskipTests=true clean package
+EXPOSE 8080
 # 运行jar包
-ENTRYPOINT ["java","-jar","npm-dependency-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","./target/npm-dependency-0.0.1-SNAPSHOT.jar"]
