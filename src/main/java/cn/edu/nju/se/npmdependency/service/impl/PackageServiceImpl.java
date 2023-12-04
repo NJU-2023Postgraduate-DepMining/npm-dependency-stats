@@ -8,13 +8,9 @@ import cn.edu.nju.se.npmdependency.service.PackageService;
 import cn.edu.nju.se.npmdependency.util.ClickHouseUtils;
 import cn.edu.nju.se.npmdependency.util.DateUtils;
 import cn.edu.nju.se.npmdependency.util.ValueConverter;
-import cn.edu.nju.se.npmdependency.vo.DependencyTendencyVO;
-import cn.edu.nju.se.npmdependency.vo.PackageVO;
-import cn.edu.nju.se.npmdependency.vo.ResultVO;
-import cn.edu.nju.se.npmdependency.vo.TendencyUnitVO;
+import cn.edu.nju.se.npmdependency.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.clickhouse.ClickHouseUtil;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -89,7 +85,7 @@ public class PackageServiceImpl implements PackageService {
      * @return cn.edu.nju.se.npmdependency.vo.ResultVO<cn.edu.nju.se.npmdependency.vo.PackageVO>
      */
     @Override
-    public DependencyTendencyVO getPackageTendency(TimeUnitEnum timeUnitEnum, StatTypeEnum statTypeEnum, String packageName, String version, String start, String end) {
+    public ResultVO<DependencyTendencyVO> getPackageTendency(TimeUnitEnum timeUnitEnum, StatTypeEnum statTypeEnum, String packageName, String version, String start, String end) {
 
         if (end == null || end.isEmpty()) {
             // Set default end time as the newest time
@@ -104,22 +100,45 @@ public class PackageServiceImpl implements PackageService {
 
 
         // Construct SQL query based on parameters
-        String sql = constructQuery(timeUnitEnum, statTypeEnum, packageName, version, start, end);
+        String sql = constructTendencyQuery(timeUnitEnum, statTypeEnum, packageName, version, start, end);
 
         // Execute the query in ClickHouse
         List<Map<String, Object>> result = clickHouseUtils.execute(sql);
         List<TendencyUnitVO> tendencyUnitVOList = mapResultToDependencyTendencyVO(result);
 
 
-        return DependencyTendencyVO.builder()
+        return ResultVO.buildSuccess(DependencyTendencyVO.builder()
                 .statTypeEnum(statTypeEnum)
                 .timeUnitEnum(timeUnitEnum)
                 .unitCount(tendencyUnitVOList.size())
                 .tendencyUnitVOList(tendencyUnitVOList)
-                .build();
+                .build());
     }
 
+    @Override
+    public ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit) {
 
+        if (end == null || end.isEmpty()) {
+            // Set default end time as the newest time
+            end = clickHouseUtils.getNewestDay(statTypeEnum.getStatTable());
+        }
+
+        // Default values for start and end if not provided
+        if (start == null || start.isEmpty()) {
+            // Set default start time to 40 years ago
+            start = DateUtils.ago(end, TimeUnitEnum.YEAR,40);
+        }
+
+
+        // Construct SQL query based on parameters
+        String sql = constructRankQuery(statTypeEnum, packageName, version, start, end, limit);
+
+        // Execute the query in ClickHouse
+        List<Map<String, Object>> result = clickHouseUtils.execute(sql);
+        List<RankUnitVO> rankUnitVOList = mapResultToRankUnitVO(result);
+
+        return ResultVO.buildSuccess(rankUnitVOList);
+    }
 
 
     private String getFilterConditionForPackageNameAndVersion(String packageName,String version) {
@@ -136,7 +155,7 @@ public class PackageServiceImpl implements PackageService {
     }
 
 
-    private String constructQuery(TimeUnitEnum timeUnitEnum, StatTypeEnum statTypeEnum, String packageName, String version, String start, String end) {
+    private String constructTendencyQuery(TimeUnitEnum timeUnitEnum, StatTypeEnum statTypeEnum, String packageName, String version, String start, String end) {
         String timeColumnName = timeUnitEnum.getTimeUnit();
         String tableName = statTypeEnum.getStatTable();
         Long startTimeStamp = DateUtils.string2Timestamp(start);
@@ -151,6 +170,19 @@ public class PackageServiceImpl implements PackageService {
         return sql;
     }
 
+    private String constructRankQuery(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit) {
+        String tableName = statTypeEnum.getStatTable();
+        Long startTimeStamp = DateUtils.string2Timestamp(start);
+        Long endTimeStamp = DateUtils.string2Timestamp(end);
+
+        String sql = "SELECT package_name, version, sum(depended_count) as count from " + tableName +
+                " where depended_time_stamp >="+startTimeStamp +" and depended_time_stamp <=" + endTimeStamp +
+                getFilterConditionForPackageNameAndVersion(packageName,version) +
+                " group by package_name, version" +
+                " order by sum(depended_count) desc limit " + limit;
+
+        return sql;
+    }
 
     private List<TendencyUnitVO> mapResultToDependencyTendencyVO(List<Map<String, Object>> result) {
         List<TendencyUnitVO> tendencyUnitVOList = new ArrayList<>();
@@ -163,5 +195,19 @@ public class PackageServiceImpl implements PackageService {
         }
 
         return tendencyUnitVOList;
+    }
+
+    private List<RankUnitVO> mapResultToRankUnitVO(List<Map<String, Object>> result) {
+        List<RankUnitVO> rankUnitVOList = new ArrayList<>();
+        for (Map<String, Object> map : result) {
+            RankUnitVO rankUnitVO = RankUnitVO.builder()
+                    .packageName((String) map.get("package_name"))
+                    .version((String) map.get("version"))
+                    .count((int) map.get("count"))
+                    .build();
+            rankUnitVOList.add(rankUnitVO);
+        }
+
+        return rankUnitVOList;
     }
 }

@@ -5,6 +5,7 @@ import cn.edu.nju.se.npmdependency.enums.TimeUnitEnum;
 import cn.edu.nju.se.npmdependency.service.PackageService;
 import cn.edu.nju.se.npmdependency.vo.DependencyTendencyVO;
 import cn.edu.nju.se.npmdependency.vo.PackageVO;
+import cn.edu.nju.se.npmdependency.vo.RankUnitVO;
 import cn.edu.nju.se.npmdependency.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -61,9 +62,19 @@ public class PackageController {
     ) {
 
 
-        return ResultVO.buildSuccess(null);
+        return packageService.getPackageTendency(timeUnitEnum, statTypeEnum, packageName, version, start, end);
     }
 
-
+    @GetMapping("/github/rank")
+    public ResultVO<List<RankUnitVO>> getPackageRank(
+            @RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum,
+            @RequestParam String packageName,
+            @RequestParam String version,
+            @RequestParam String start,
+            @RequestParam String end,
+            @RequestParam int limit
+    ) {
+        return packageService.getPackageRank(statTypeEnum, packageName, version, start, end, limit);
+    }
 
 }
