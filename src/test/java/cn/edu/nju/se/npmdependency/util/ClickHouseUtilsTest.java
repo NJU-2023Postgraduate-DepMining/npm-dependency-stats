@@ -16,9 +16,9 @@ class ClickHouseUtilsTest {
     void execute() {
 
 
-        clickHouseUtils.execute("select month,count(*) as count from stat " +
-                "where package_name='a' and version='1' and depended_time_stamp>=0 and depended_time_stamp<='2926-12-04 13:18:30' " +
-                "group by month");
+        clickHouseUtils.execute("select month,count(*) as count from npm_dependency_stats " +
+                " where package_name='a' and version='1' and depended_time_stamp>=0 and depended_time_stamp<=66 " +
+                " group by month");
 
 
     }

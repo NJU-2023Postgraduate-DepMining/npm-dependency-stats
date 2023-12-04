@@ -5,7 +5,7 @@ package cn.edu.nju.se.npmdependency.enums;
  * @date 2023/12/4 4:40
  */
 public enum StatTypeEnum {
-    NPM("npm"),GITHUB("github"),TEST("stat");
+    NPM("npm_dependency_stats"),GITHUB("github_dependency_stats"),TEST("npm_dependency_stats");
 
     private String statTable;
 

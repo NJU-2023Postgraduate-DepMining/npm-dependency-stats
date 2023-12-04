@@ -30,7 +30,7 @@ public class ClickHouseUtils {
             return DateUtils.today();
         }
         Map<String,Object> map = mapList.get(0);
-        return DateUtils.timeStamp2String(((Date)map.get("newest")).getTime());
+        return DateUtils.timeStamp2String((Long)map.get("newest"));
     }
 
 
