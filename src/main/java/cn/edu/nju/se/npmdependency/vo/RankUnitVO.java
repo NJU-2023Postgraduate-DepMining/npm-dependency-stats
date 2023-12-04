@@ -8,5 +8,5 @@ import lombok.Data;
 public class RankUnitVO {
     String packageName;
     String version;
-    Integer count;
+    Long count;
 }

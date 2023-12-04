@@ -116,7 +116,7 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit) {
+    public ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String start, String end, int limit) {
 
         if (end == null || end.isEmpty()) {
             // Set default end time as the newest time
@@ -131,7 +131,7 @@ public class PackageServiceImpl implements PackageService {
 
 
         // Construct SQL query based on parameters
-        String sql = constructRankQuery(statTypeEnum, packageName, version, start, end, limit);
+        String sql = constructRankQuery(statTypeEnum, packageName, start, end, limit);
 
         // Execute the query in ClickHouse
         List<Map<String, Object>> result = clickHouseUtils.execute(sql);
@@ -175,16 +175,24 @@ public class PackageServiceImpl implements PackageService {
         return sql;
     }
 
-    private String constructRankQuery(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit) {
+    private String constructRankQuery(StatTypeEnum statTypeEnum, String packageName, String start, String end, int limit) {
         String tableName = statTypeEnum.getStatTable();
         Long startTimeStamp = DateUtils.string2Timestamp(start);
         Long endTimeStamp = DateUtils.string2Timestamp(end);
 
-        String sql = "SELECT package_name, version, sum(depended_count) as count from " + tableName +
-                " where depended_time_stamp >="+startTimeStamp +" and depended_time_stamp <=" + endTimeStamp +
-                getFilterConditionForPackageNameAndVersion(packageName,version) +
-                " group by package_name, version" +
-                " order by sum(depended_count) desc limit " + limit;
+        String sql;
+        if (packageName != null && !packageName.isEmpty()) {
+            sql = "SELECT package_name, version, sum(depended_count) as count from " + tableName +
+                    " where depended_time_stamp >="+startTimeStamp +" and depended_time_stamp <=" + endTimeStamp +
+                    " and package_name = " + "'" + packageName + "'" +
+                    " group by package_name, version" +
+                    " order by sum(depended_count) desc limit " + limit;
+        } else {
+            sql = "SELECT package_name, version, sum(depended_count) as count from " + tableName +
+                    " where depended_time_stamp >="+startTimeStamp +" and depended_time_stamp <=" + endTimeStamp +
+                    " group by package_name, version" +
+                    " order by sum(depended_count) desc limit " + limit;
+        }
 
         return sql;
     }
@@ -208,7 +216,7 @@ public class PackageServiceImpl implements PackageService {
             RankUnitVO rankUnitVO = RankUnitVO.builder()
                     .packageName((String) map.get("package_name"))
                     .version((String) map.get("version"))
-                    .count((int) map.get("count"))
+                    .count((long) map.get("count"))
                     .build();
             rankUnitVOList.add(rankUnitVO);
         }

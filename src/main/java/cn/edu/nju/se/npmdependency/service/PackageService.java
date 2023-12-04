@@ -22,7 +22,7 @@ public interface PackageService {
             String end
     );
 
-    ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit);
+    ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String start, String end, int limit);
 
     ResultVO<String> getUpdateTime(StatTypeEnum statTypeEnum);
 }

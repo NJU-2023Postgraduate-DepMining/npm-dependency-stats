@@ -73,12 +73,11 @@ public class PackageController {
     public ResultVO<List<RankUnitVO>> getPackageRank(
             @RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum,
             @RequestParam String packageName,
-            @RequestParam String version,
             @RequestParam String start,
             @RequestParam String end,
             @RequestParam int limit
     ) {
-        return packageService.getPackageRank(statTypeEnum, packageName, version, start, end, limit);
+        return packageService.getPackageRank(statTypeEnum, packageName, start, end, limit);
     }
 
     @GetMapping("update-time")

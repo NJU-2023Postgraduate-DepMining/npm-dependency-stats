@@ -42,7 +42,7 @@ public class DateUtils {
         LocalDate localDate = parseDate(localDateStr);
         Instant instant = localDate.atStartOfDay().toInstant(ZoneOffset.ofHours(8));
         // 转换为时间戳（Epoch秒数）
-        return instant.getEpochSecond();
+        return instant.getEpochSecond() * 1000;
     }
 
 
@@ -82,7 +82,7 @@ public class DateUtils {
     }
 
     public static String timeStamp2String(Long timestamp) {
-        long epochDay = timestamp / 86400;
+        long epochDay = timestamp / 1000 / 86400;
         return LocalDate.ofEpochDay(epochDay).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
