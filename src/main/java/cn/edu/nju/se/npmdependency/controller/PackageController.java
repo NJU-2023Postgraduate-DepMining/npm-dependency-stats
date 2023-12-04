@@ -9,6 +9,7 @@ import cn.edu.nju.se.npmdependency.vo.RankUnitVO;
 import cn.edu.nju.se.npmdependency.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,11 +59,12 @@ public class PackageController {
      */
     @GetMapping("/tendency")
     public ResultVO<DependencyTendencyVO> getPackageTendency(
-            @RequestParam @DefaultValue("DAY") TimeUnitEnum timeUnitEnum,
-            @RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum,@RequestParam String packageName,
-            @RequestParam String version,
-            @RequestParam String start,
-            @RequestParam String end
+            @RequestParam TimeUnitEnum timeUnitEnum,
+            @RequestParam StatTypeEnum statTypeEnum,
+            @RequestParam @Nullable String packageName,
+            @RequestParam @Nullable String version,
+            @RequestParam @Nullable String start,
+            @RequestParam @Nullable String end
     ) {
 
 
@@ -71,17 +73,17 @@ public class PackageController {
 
     @GetMapping("/github/rank")
     public ResultVO<List<RankUnitVO>> getPackageRank(
-            @RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum,
-            @RequestParam String packageName,
-            @RequestParam String start,
-            @RequestParam String end,
-            @RequestParam int limit
+            @RequestParam StatTypeEnum statTypeEnum,
+            @RequestParam @Nullable String packageName,
+            @RequestParam @Nullable String start,
+            @RequestParam @Nullable String end,
+            @RequestParam @DefaultValue("10") Integer limit
     ) {
         return packageService.getPackageRank(statTypeEnum, packageName, start, end, limit);
     }
 
     @GetMapping("update-time")
-    public ResultVO<String> getUpdateTime(@RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum) {
+    public ResultVO<String> getUpdateTime(@RequestParam StatTypeEnum statTypeEnum) {
         return packageService.getUpdateTime(statTypeEnum);
     }
 }

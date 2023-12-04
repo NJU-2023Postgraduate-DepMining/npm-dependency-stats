@@ -7,7 +7,7 @@ spring:
 
   datasource:
     second-datasource:
-      jdbcUrl: jdbc:clickhouse://clickhouse.clickhouse:8123/cloud
+      jdbcUrl: jdbc:clickhouse://${CLICKHOUSE_HOST:172.29.4.74}:${CLICKHOUSE_PORT:30012}/cloud
       username: admin
       password: password
       driver-class-name: ru.yandex.clickhouse.ClickHouseDriver
@@ -16,8 +16,8 @@ spring:
 
   data:
     mongodb:
-        host: mongo-db.default
-        port: 27017
+        host: ${MONGO_DB_HOST:172.29.4.74}
+        port: ${MONGO_DB_PORT:30004}
         database: npm
         password: mongoadmin
         username: mongoadmin
