@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,17 @@ public class ClickHouseUtils {
     @Qualifier(value = "clickHouseJdbcTemplate")
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+
+
+    public String getNewestDay(String tableName){
+        List<Map<String,Object>> mapList = jdbcTemplate.queryForList("select max(depended_time_stamp) as newest from " + tableName);
+        if(mapList.isEmpty()){
+            return DateUtils.today();
+        }
+        Map<String,Object> map = mapList.get(0);
+        return DateUtils.timeStamp2String(((Date)map.get("newest")).getTime());
+    }
 
 
 

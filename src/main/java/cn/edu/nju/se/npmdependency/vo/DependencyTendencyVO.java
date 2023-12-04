@@ -2,6 +2,8 @@ package cn.edu.nju.se.npmdependency.vo;
 
 import cn.edu.nju.se.npmdependency.enums.StatTypeEnum;
 import cn.edu.nju.se.npmdependency.enums.TimeUnitEnum;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -9,6 +11,8 @@ import java.util.List;
  * @author fanyanpeng
  * @date 2023/12/4 4:44
  */
+@Getter
+@Builder
 public class DependencyTendencyVO {
 
     // 统计的表格，NPM or GITHUB

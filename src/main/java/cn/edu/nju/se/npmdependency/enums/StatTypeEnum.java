@@ -5,12 +5,16 @@ package cn.edu.nju.se.npmdependency.enums;
  * @date 2023/12/4 4:40
  */
 public enum StatTypeEnum {
-    NPM("npm"),GITHUB("github");
+    NPM("npm"),GITHUB("github"),TEST("stat");
 
-    private String statType;
+    private String statTable;
 
-    StatTypeEnum(String statType) {
-        this.statType = statType;
+    StatTypeEnum(String statTable) {
+        this.statTable = statTable;
+    }
+
+    public String getStatTable() {
+        return statTable;
     }
 
 }
