@@ -14,7 +14,7 @@ public class PackageVO {
     List<PackageVO> dependencies;
 
     public PackageVO(PackageInfoEntity packageInfoEntity) {
-        this.packageId = packageInfoEntity.getId();
+        this.packageId = packageInfoEntity.getPackageName() + ":" + packageInfoEntity.getVersion();
         this.packageName = packageInfoEntity.getPackageName();
         this.version = packageInfoEntity.getVersion();
         this.dependencies = new ArrayList<>();

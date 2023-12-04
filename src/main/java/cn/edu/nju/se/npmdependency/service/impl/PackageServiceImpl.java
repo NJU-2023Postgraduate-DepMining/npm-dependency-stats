@@ -1,5 +1,6 @@
 package cn.edu.nju.se.npmdependency.service.impl;
 
+import cn.edu.nju.se.npmdependency.entity.PackageEntity;
 import cn.edu.nju.se.npmdependency.entity.PackageInfoEntity;
 import cn.edu.nju.se.npmdependency.enums.StatTypeEnum;
 import cn.edu.nju.se.npmdependency.enums.TimeUnitEnum;
@@ -23,10 +24,10 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public ResultVO<PackageVO> getPackageDetail(String packageName, String version) {
-        PackageInfoEntity packageInfoEntity = packageInfoRepository.findPackageInfoEntityById(packageName + version);
+        PackageInfoEntity packageInfoEntity = packageInfoRepository.findPackageInfoEntityByPackageNameAndVersion(packageName, version);
         PackageVO packageVO = new PackageVO(packageInfoEntity);
-        for (String id: packageInfoEntity.getDependencies()) {
-            PackageInfoEntity dependedPackageInfoEntity = packageInfoRepository.findPackageInfoEntityById(id);
+        for (PackageInfoEntity dependency: packageInfoEntity.getDependencies()) {
+            PackageInfoEntity dependedPackageInfoEntity = packageInfoRepository.findPackageInfoEntityByPackageNameAndVersion(dependency.getPackageName(), dependency.getVersion());
             packageVO.getDependencies().add(new PackageVO(dependedPackageInfoEntity));
         }
         return ResultVO.buildSuccess(packageVO);
@@ -34,7 +35,7 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public ResultVO<PackageVO> getPackageDependencyTree(String packageName, String version) {
-        PackageInfoEntity packageInfoEntity = packageInfoRepository.findPackageInfoEntityById(packageName + version);
+        PackageInfoEntity packageInfoEntity = packageInfoRepository.findPackageInfoEntityByPackageNameAndVersion(packageName, version);
 
         PackageVO packageVO = new PackageVO(packageInfoEntity);
         Map<PackageInfoEntity, PackageVO> map = new HashMap<>();
@@ -47,8 +48,8 @@ public class PackageServiceImpl implements PackageService {
             PackageInfoEntity entity = queue.remove(0);
             PackageVO vo = map.get(entity);
 
-            for (String id: entity.getDependencies()) {
-                PackageInfoEntity dependedPackageInfoEntity = packageInfoRepository.findPackageInfoEntityById(id);
+            for (PackageInfoEntity dependency: entity.getDependencies()) {
+                PackageInfoEntity dependedPackageInfoEntity = packageInfoRepository.findPackageInfoEntityByPackageNameAndVersion(dependency.getPackageName(), dependency.getVersion());
                 PackageVO dependedPackageVO = new PackageVO(dependedPackageInfoEntity);
 
                 vo.getDependencies().add(dependedPackageVO);

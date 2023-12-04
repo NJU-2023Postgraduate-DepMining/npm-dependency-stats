@@ -4,16 +4,14 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document("package_info")
 @Data
+@Document("npm")
 public class PackageInfoEntity {
-
-    private String id;
 
     @Field("package_name")
     private String packageName;
 
     private String version;
 
-    private String[] dependencies;
+    private PackageInfoEntity[] dependencies;
 }
