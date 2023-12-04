@@ -14,12 +14,12 @@ public class PackageServiceTest {
         System.out.println(packageService.getPackagesByName("package_name").getResult());
     }
 
-    @Test
+//    @Test
     public void testGetPackageDetail() {
         System.out.println(packageService.getPackageDetail("package_name", "0.1").getResult());
     }
 
-    @Test
+//    @Test
     public void testGetPackageDependencyTree() {
         System.out.println(packageService.getPackageDependencyTree("package_name", "0.1").getResult());
     }

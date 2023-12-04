@@ -30,7 +30,7 @@ class JdbcTemplateConfigTest {
 
     @Test
     void clickHouseTest(){
-        String sql="select * from test";
+        String sql="select count(*) from npm_dependency_stats";
         System.out.println(jdbcTemplate.queryForList(sql));
     }
 
