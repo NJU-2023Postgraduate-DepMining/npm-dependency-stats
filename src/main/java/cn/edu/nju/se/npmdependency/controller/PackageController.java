@@ -9,7 +9,6 @@ import cn.edu.nju.se.npmdependency.vo.RankUnitVO;
 import cn.edu.nju.se.npmdependency.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,4 +81,8 @@ public class PackageController {
         return packageService.getPackageRank(statTypeEnum, packageName, version, start, end, limit);
     }
 
+    @GetMapping("update-time")
+    public ResultVO<String> getUpdateTime(@RequestParam @DefaultValue("GITHUB") StatTypeEnum statTypeEnum) {
+        return packageService.getUpdateTime(statTypeEnum);
+    }
 }

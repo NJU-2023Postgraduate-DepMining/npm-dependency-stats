@@ -140,6 +140,11 @@ public class PackageServiceImpl implements PackageService {
         return ResultVO.buildSuccess(rankUnitVOList);
     }
 
+    @Override
+    public ResultVO<String> getUpdateTime(StatTypeEnum statTypeEnum) {
+        return ResultVO.buildSuccess(clickHouseUtils.getNewestDay(statTypeEnum.getStatTable()));
+    }
+
 
     private String getFilterConditionForPackageNameAndVersion(String packageName,String version) {
         if (packageName == null || packageName.isEmpty()) {

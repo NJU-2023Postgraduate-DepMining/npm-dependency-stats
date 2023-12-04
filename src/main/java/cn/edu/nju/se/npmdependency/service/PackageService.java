@@ -6,7 +6,6 @@ import cn.edu.nju.se.npmdependency.vo.DependencyTendencyVO;
 import cn.edu.nju.se.npmdependency.vo.PackageVO;
 import cn.edu.nju.se.npmdependency.vo.RankUnitVO;
 import cn.edu.nju.se.npmdependency.vo.ResultVO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,4 +23,6 @@ public interface PackageService {
     );
 
     ResultVO<List<RankUnitVO>> getPackageRank(StatTypeEnum statTypeEnum, String packageName, String version, String start, String end, int limit);
+
+    ResultVO<String> getUpdateTime(StatTypeEnum statTypeEnum);
 }
