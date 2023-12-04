@@ -189,9 +189,9 @@ public class PackageServiceImpl implements PackageService {
                     " group by package_name, version" +
                     " order by sum(depended_count) desc limit " + limit;
         } else {
-            sql = "SELECT package_name, version, sum(depended_count) as count from " + tableName +
+            sql = "SELECT package_name, sum(depended_count) as count from " + tableName +
                     " where depended_time_stamp >="+startTimeStamp +" and depended_time_stamp <=" + endTimeStamp +
-                    " group by package_name, version" +
+                    " group by package_name" +
                     " order by sum(depended_count) desc limit " + limit;
         }
 
