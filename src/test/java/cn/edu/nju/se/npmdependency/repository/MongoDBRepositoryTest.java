@@ -11,8 +11,7 @@ public class MongoDBRepositoryTest {
 
     @Test
     public void testPackInfoRepository() {
-        System.out.println(packageInfoRepository.findAll());
-        System.out.println(packageInfoRepository.findPackageInfoEntityById("package_name0.1"));
+//        System.out.println(packageInfoRepository.findAll());
         System.out.println(packageInfoRepository.findPackageInfoEntitiesByPackageName("package_name"));
     }
 

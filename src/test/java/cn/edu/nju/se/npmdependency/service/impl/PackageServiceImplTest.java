@@ -88,7 +88,7 @@ class PackageServiceImplTest {
 
     @Test
     void getPackageRank() {
-        List<RankUnitVO> rankUnitVOList = packageService.getPackageRank(StatTypeEnum.TEST, "a", "1", "2022-01-01", "2024-01-01", 10).getResult();
+        List<RankUnitVO> rankUnitVOList = packageService.getPackageRank(StatTypeEnum.NPM, "axios", "2012-01-01", "2032-01-01",  100).getResult();
         System.out.println(JSON.toJSONString(rankUnitVOList));
     }
 }

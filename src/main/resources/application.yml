@@ -7,7 +7,7 @@ spring:
 
   datasource:
     second-datasource:
-      jdbcUrl: jdbc:clickhouse://172.29.4.74:30012/test
+      jdbcUrl: jdbc:clickhouse://172.29.4.74:30012/cloud
       username: admin
       password: password
       driver-class-name: ru.yandex.clickhouse.ClickHouseDriver
