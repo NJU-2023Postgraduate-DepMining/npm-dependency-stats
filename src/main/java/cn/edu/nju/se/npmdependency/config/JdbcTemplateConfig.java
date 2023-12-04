@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -29,14 +30,9 @@ public class JdbcTemplateConfig {
     }
 
     @Bean(name = "secondDatasource")
+    @ConfigurationProperties(prefix = "spring.datasource.second-datasource")
     public DataSource clickHouseDataSource(){
-        HikariConfig hikariConfig=new HikariConfig();
-        hikariConfig.setJdbcUrl("jdbc:clickhouse://172.29.4.74:30012/test");    // 在test数据库下进行测试
-        hikariConfig.setUsername("admin");
-        hikariConfig.setPassword("password");
-        hikariConfig.setDriverClassName("ru.yandex.clickhouse.ClickHouseDriver");
-        hikariConfig.setConnectionTimeout(100000);
-        return new HikariDataSource(hikariConfig);
+        return new HikariDataSource();
     }
 
 }
