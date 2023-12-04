@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/packages")
@@ -20,6 +21,10 @@ public class PackageController {
     @Autowired
     private PackageService packageService;
 
+    @GetMapping("/{packageName}/versions")
+    public ResultVO<List<String>> getPackagesVersionsByName(@PathVariable String packageName) {
+        return ResultVO.buildSuccess(packageService.getPackagesByName(packageName).getResult().stream().map(PackageVO::getVersion).collect(Collectors.toList()));
+    }
     @GetMapping("/{packageName}")
     public ResultVO<List<PackageVO>> getPackagesByName(@PathVariable String packageName) {
         return packageService.getPackagesByName(packageName);
