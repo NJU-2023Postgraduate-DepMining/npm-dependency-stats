@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("npm")
 public class PackageInfoEntity {
 
-    @Field("package_name")
+    @Field("package")
     private String packageName;
 
     private String version;

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PackageInfoRepository extends MongoRepository<PackageInfoEntity, String> {
 
-    @Query("{'package_name' :'?0', 'version' :'?1'}")
+    @Query("{'package' :'?0', 'version' :'?1'}")
     PackageInfoEntity findPackageInfoEntityByPackageNameAndVersion(String packageName, String version);
 
-    @Query("{'package_name' :'?0'}")
+    @Query("{'package' :'?0'}")
     List<PackageInfoEntity> findPackageInfoEntitiesByPackageName(String packageName);
 }

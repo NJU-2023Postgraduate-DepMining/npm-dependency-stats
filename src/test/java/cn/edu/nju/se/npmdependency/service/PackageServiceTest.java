@@ -19,7 +19,7 @@ public class PackageServiceTest {
 
     @Test
     public void testGetPackagesByName() {
-        System.out.println(packageService.getPackagesByName("package_name").getResult());
+        System.out.println(packageService.getPackagesByName("axios").getResult());
     }
 
 //    @Test
